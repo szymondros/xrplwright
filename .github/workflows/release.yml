@@ -1,0 +1,37 @@
+# Publishes xrplwright and create-xrplwright to npm when a v* tag is pushed.
+# Uses npm trusted publishing (OIDC): no npm token is stored in GitHub.
+# One-time setup on npmjs.com, for each package: Settings > Trusted publisher >
+# GitHub Actions, this repository, workflow "release.yml".
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # OIDC for npm trusted publishing and provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest # trusted publishing needs npm >= 11.5
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+      - name: Check the tag matches the package versions
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          for p in xrplwright create-xrplwright; do
+            V=$(node -p "require('./packages/$p/package.json').version")
+            [ "$V" = "$TAG" ] || { echo "$p is $V, tag is $TAG"; exit 1; }
+          done
+      # The library first: create-xrplwright depends on it.
+      - run: npm publish -w xrplwright --access public
+      - run: npm publish -w create-xrplwright --access public

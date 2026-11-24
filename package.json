@@ -1,0 +1,12 @@
+{
+  "name": "xrplwright-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/xrplwright", "packages/create-xrplwright", "examples/*"],
+  "scripts": {
+    "build": "npm run build -w xrplwright",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm test -w xrplwright && npm test -w demo-dapp-e2e"
+  },
+  "engines": { "node": ">=22" }
+}

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo XRPL dapp</title>
+    <script src="/crossmark-sdk.js"></script>
+    <script src="/app.js" defer></script>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 36rem; margin: 3rem auto; }
+      section { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+      [role='status'] { margin-top: 0.5rem; font-family: monospace; }
+    </style>
+  </head>
+  <body>
+    <h1>Demo XRPL dapp</h1>
+
+    <section>
+      <h2>Wallet</h2>
+      <button id="connect">Connect Crossmark</button>
+      <p id="account" role="status">Not connected</p>
+    </section>
+
+    <section>
+      <h2>Send XRP</h2>
+      <label>Destination <input id="destination" placeholder="r..." /></label>
+      <label>Amount (XRP) <input id="amount" value="1" /></label>
+      <button id="send" disabled>Send</button>
+      <p id="payment" role="status"></p>
+    </section>
+  </body>
+</html>
