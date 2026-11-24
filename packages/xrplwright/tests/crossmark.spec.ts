@@ -1,7 +1,7 @@
 import { verify } from 'ripple-keypairs';
-import { ECDSA, Wallet, xrpToDrops } from 'xrpl';
+import { Wallet, xrpToDrops } from 'xrpl';
 
-import { expect, test } from '../src/index.js';
+import { expect, SECP256K1, test } from '../src/index.js';
 import { openDemoDapp } from './demo-dapp.js';
 
 test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
@@ -40,7 +40,7 @@ test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
     test.use({ fundWallet: true });
 
     test('signs and submits a Payment', async ({ page, wallet, ledger }) => {
-      const destination = Wallet.generate(ECDSA.secp256k1);
+      const destination = Wallet.generate(SECP256K1);
       await ledger.fund(destination);
       const before = await ledger.xrpBalance(destination.classicAddress);
 

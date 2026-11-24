@@ -18,10 +18,11 @@ async function main() {
       return runInit(args);
     }
     case 'new-wallet': {
-      const { ECDSA, Wallet } = await import('xrpl');
+      const { Wallet } = await import('xrpl');
+      const { SECP256K1 } = await import('./wallets/BaseWallet.js');
       const { NETWORKS, XrplLedger } = await import('./ledger/XrplLedger.js');
       const url = args[0] ?? NETWORKS.testnet;
-      const wallet = Wallet.generate(ECDSA.secp256k1);
+      const wallet = Wallet.generate(SECP256K1);
       const ledger = new XrplLedger(url);
       try {
         const { balance } = await ledger.fund(wallet);

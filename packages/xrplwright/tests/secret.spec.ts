@@ -1,17 +1,17 @@
 import { sign, verify } from 'ripple-keypairs';
-import { ECDSA, Wallet } from 'xrpl';
+import { Wallet } from 'xrpl';
 
-import { expect, test, walletFromSecret } from '../src/index.js';
+import { ED25519, expect, SECP256K1, test, walletFromSecret } from '../src/index.js';
 
 const message = Buffer.from('xrplwright', 'utf8').toString('hex');
 
-for (const algorithm of [ECDSA.secp256k1, ECDSA.ed25519]) {
+for (const algorithm of [SECP256K1, ED25519]) {
   test(`walletFromSecret: every form of a ${algorithm} secret gives the same account`, () => {
     const original = Wallet.generate(algorithm);
     const raw = original.privateKey.slice(2); // without the 00 / ED prefix
 
     const forms = [original.seed!, original.privateKey, original.privateKey.toLowerCase()];
-    if (algorithm === ECDSA.secp256k1) forms.push(raw, `0x${raw}`);
+    if (algorithm === SECP256K1) forms.push(raw, `0x${raw}`);
 
     for (const secret of forms) {
       const wallet = walletFromSecret(secret);

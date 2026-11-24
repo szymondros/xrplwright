@@ -173,14 +173,15 @@ and `ledger` (the state on chain). The usual shape:
    shows, and what changed on the ledger.
 
 ```ts
-import { ECDSA, Wallet, xrpToDrops } from 'xrpl';
+import { Wallet, xrpToDrops } from 'xrpl';
+import { SECP256K1 } from 'xrplwright';
 import { expect, test } from '../fixtures';
 
 test.use({ fundWallet: true });
 
 test('pays 1.5 XRP', async ({ dapp, wallet, ledger }) => {
   // 1. Arrange
-  const recipient = Wallet.generate(ECDSA.secp256k1);
+  const recipient = Wallet.generate(SECP256K1);
   await ledger.fund(recipient);
   const before = await ledger.xrpBalance(recipient.classicAddress);
 

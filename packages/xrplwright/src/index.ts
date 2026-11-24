@@ -2,7 +2,7 @@ export { test, expect } from './fixtures.js';
 export type { XrplOptions, XrplFixtures, WalletKind } from './fixtures.js';
 export { XrplLedger, NETWORKS } from './ledger/XrplLedger.js';
 export type { IssuedCurrency } from './ledger/XrplLedger.js';
-export { BaseWallet } from './wallets/BaseWallet.js';
+export { BaseWallet, SECP256K1, ED25519 } from './wallets/BaseWallet.js';
 export type { WalletOptions } from './wallets/BaseWallet.js';
 export type { WalletDriver, WalletRequest, Decision } from './wallets/types.js';
 export { CrossmarkWallet } from './wallets/crossmark/CrossmarkWallet.js';

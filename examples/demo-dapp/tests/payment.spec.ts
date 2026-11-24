@@ -1,4 +1,5 @@
-import { ECDSA, Wallet, xrpToDrops } from 'xrpl';
+import { Wallet, xrpToDrops } from 'xrpl';
+import { SECP256K1 } from 'xrplwright';
 
 import { expect, test } from '../fixtures';
 
@@ -6,7 +7,7 @@ import { expect, test } from '../fixtures';
 test.use({ fundWallet: true });
 
 test('pays 1.5 XRP and the ledger shows it', async ({ dapp, wallet, ledger }) => {
-  const recipient = Wallet.generate(ECDSA.secp256k1);
+  const recipient = Wallet.generate(SECP256K1);
   await ledger.fund(recipient);
   const before = await ledger.xrpBalance(recipient.classicAddress);
 

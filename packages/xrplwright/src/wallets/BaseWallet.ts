@@ -1,9 +1,16 @@
-import { ECDSA, Wallet } from 'xrpl';
+import { Wallet, type ECDSA } from 'xrpl';
 
 import { walletFromSecret } from './secret.js';
 
 import type { XrplLedger } from '../ledger/XrplLedger.js';
 import type { Decision, WalletRequest } from './types.js';
+
+/**
+ * `ECDSA.secp256k1`. The ECDSA enum is not importable by name from xrpl's CommonJS
+ * build on Node 22, so the value is spelled out (types still come from xrpl).
+ */
+export const SECP256K1 = 'ecdsa-secp256k1' as ECDSA;
+export const ED25519 = 'ed25519' as ECDSA;
 
 export interface WalletOptions {
   /**
@@ -25,7 +32,7 @@ export abstract class BaseWallet<Req extends WalletRequest> {
   private readonly listeners = new Set<(request: Req) => void>();
 
   constructor(options: WalletOptions) {
-    this.wallet = options.seed ? walletFromSecret(options.seed) : Wallet.generate(ECDSA.secp256k1);
+    this.wallet = options.seed ? walletFromSecret(options.seed) : Wallet.generate(SECP256K1);
     this.ledger = options.ledger;
   }
 
