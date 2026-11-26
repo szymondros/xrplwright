@@ -9,6 +9,7 @@ const files = {
   '/': [new URL('./app/index.html', import.meta.url), 'text/html'],
   '/app.js': [new URL('./app/app.js', import.meta.url), 'text/javascript'],
   '/crossmark-sdk.js': [require.resolve('@crossmarkio/sdk/umd'), 'text/javascript'],
+  '/gemwallet-api.js': [require.resolve('@gemwallet/api/umd/gemwallet-api.js'), 'text/javascript'],
 };
 
 createServer(async (req, res) => {

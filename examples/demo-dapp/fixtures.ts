@@ -1,13 +1,13 @@
 import { expect, type Page } from '@playwright/test';
-import { test as base } from 'xrplwright';
+import { test as base, walletTest } from 'xrplwright';
 
 /** Page object: the dapp's steps in one place, so tests read like scenarios. */
 export class DemoDapp {
   constructor(readonly page: Page) {}
 
-  async connect() {
+  async connect(wallet: 'Crossmark' | 'GemWallet' = 'Crossmark') {
     await this.page.goto('/');
-    await this.page.getByRole('button', { name: 'Connect Crossmark' }).click();
+    await this.page.getByRole('button', { name: `Connect ${wallet}` }).click();
   }
 
   account() {
@@ -25,8 +25,13 @@ export class DemoDapp {
   }
 }
 
-export const test = base.extend<{ dapp: DemoDapp }>({
-  dapp: async ({ page }, use) => use(new DemoDapp(page)),
-});
+type DappFixtures = { dapp: DemoDapp };
+const dapp = async ({ page }: { page: Page }, use: (d: DemoDapp) => Promise<void>) => use(new DemoDapp(page));
+
+/** The dapp with the Crossmark wallet (the default `test`). */
+export const test = base.extend<DappFixtures>({ dapp });
+
+/** The dapp with GemWallet: `wallet` is a `GemWallet`. */
+export const gemTest = walletTest('gemwallet').extend<DappFixtures>({ dapp });
 
 export { expect };

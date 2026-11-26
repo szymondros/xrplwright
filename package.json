@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npm run build -w xrplwright",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm test -w xrplwright && npm test -w demo-dapp-e2e"
+    "test": "npm test -w xrplwright && npm test -w demo-dapp-e2e",
+    "test:offline": "npm run test:offline -w xrplwright && npm run test:offline -w demo-dapp-e2e",
+    "test:testnet": "npm run test:testnet -w xrplwright && npm run test:testnet -w demo-dapp-e2e"
   },
   "engines": { "node": ">=22" }
 }

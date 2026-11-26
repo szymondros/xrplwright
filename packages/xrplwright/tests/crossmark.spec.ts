@@ -19,7 +19,8 @@ test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
 
     expect(result.detected).toBe(true);
     expect(result.connect.address).toBe(wallet.address);
-    expect(result.signed.publicKey).toBe(wallet.wallet.publicKey);
+    expect(result.signed.publicKey).toBe(wallet.account.publicKey);
+    expect(wallet.wallet, 'deprecated alias').toBe(wallet.account);
     expect(verify(challenge, result.signed.signature, result.signed.publicKey)).toBe(true);
   });
 
@@ -36,7 +37,7 @@ test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
     expect(meta.isRejected).toBe(true);
   });
 
-  test.describe('on Testnet', () => {
+  test.describe('on Testnet', { tag: '@testnet' }, () => {
     test.use({ fundWallet: true });
 
     test('signs and submits a Payment', async ({ page, wallet, ledger }) => {

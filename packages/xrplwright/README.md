@@ -2,12 +2,17 @@
 
 Playwright end-to-end testing for XRP Ledger dapps.
 
-xrplwright adds an XRPL wallet to the browser in your Playwright tests. The
-dapp connects to it through its usual wallet SDK. The wallet signs with a real
-key and submits transactions to a real network (XRPL Testnet by default).
+xrplwright puts an XRPL wallet into the browser of your Playwright tests. The
+dapp connects to it through its usual wallet SDK; the wallet signs with a real
+key and submits to a real network (XRPL Testnet by default).
 
-- **Crossmark wallet** for dapps using `@crossmarkio/sdk`: connect, message
-  signing, `sign`, `sign-and-submit`, `submit`
+| Wallet | The dapp uses | |
+| --- | --- | --- |
+| Crossmark | `@crossmarkio/sdk` | [docs](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/wallets/crossmark.md) |
+| GemWallet | `@gemwallet/api` | [docs](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/wallets/gemwallet.md) |
+
+Xaman, Ledger and WalletConnect are next: see the [roadmap](https://github.com/szymondros/xrplwright/blob/v0.1.0/ROADMAP.md).
+
 - **Real signatures**: login challenges and transactions verify like the real wallet's
 - **Real transactions**: autofilled, signed, submitted and awaited until validated
 - **Approve or reject** each wallet prompt from the test
@@ -21,37 +26,17 @@ key and submits transactions to a real network (XRPL Testnet by default).
 ## Install
 
 ```bash
-npm init xrplwright my-e2e
+npm init xrplwright my-e2e          # a new e2e project in my-e2e/
+npm init xrplwright -- --here       # or e2e tests inside the current project
 ```
 
-This creates `my-e2e/` with a Playwright config, fixtures, an example test and
-`.env.example`, and installs `@playwright/test`, `xrplwright` and Chromium.
-
-To add the tests to an existing project instead (in `./e2e`):
-
-```bash
-npm init xrplwright -- --here
-```
-
-| Option | |
-| --- | --- |
-| `--base-url <url>` | URL of the dapp under test (default `http://localhost:3000`) |
-| `--ci gitlab\|github` | add a scheduled CI job |
-| `--tests-dir <name>` | folder for the tests with `--here` (default `e2e`) |
-| `--no-install` | only write the files |
-| `-y` | use the defaults without asking |
-
-To set it up by hand:
-
-```bash
-npm i -D @playwright/test xrplwright
-npx playwright install chromium
-```
+Or by hand: `npm i -D @playwright/test xrplwright && npx playwright install chromium`.
+Details in [Getting started](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/getting-started.md).
 
 ## Usage
 
 ```ts
-import { test, expect } from 'xrplwright';
+import { test, expect } from 'xrplwright'; // Crossmark; walletTest('gemwallet') for GemWallet
 
 test.use({ fundWallet: true }); // fresh Testnet account with XRP from the faucet
 
@@ -80,43 +65,21 @@ test('rejecting the payment shows an error', async ({ page, wallet }) => {
 });
 ```
 
-### Fixtures
-
 | Fixture | |
 | --- | --- |
-| `wallet` | The wallet, installed into every page before it loads |
-| `wallet.address` | The account's classic address |
-| `wallet.rejectNext(n?)` / `wallet.approveNext(n?)` | Decide the next prompts (default: approve) |
-| `wallet.waitForRequest(predicate?)` | Wait for a request the dapp sent to the wallet |
-| `wallet.requests` | Every request so far, as `{ command, data }` |
-| `ledger.fund(wallet)` | Fund an account from the Testnet/Devnet faucet |
-| `ledger.xrpBalance(address)` | XRP balance |
-| `ledger.tokenBalance(address, { currency, issuer })` | Issued-token balance |
-| `ledger.setTrustline(wallet, { currency, issuer })` | Open a trust line |
-| `ledger.signAndSubmit(wallet, tx)` | Submit any transaction and wait for validation |
-
-### Options
-
-Set these in `playwright.config.ts` (`use`) or per file with `test.use({ ... })`:
+| `wallet` | The wallet, installed into every page before it loads: `address`, `account`, `rejectNext()`, `approveNext()`, `waitForRequest()`, `requests` |
+| `ledger` | The XRPL node: `fund()`, `xrpBalance()`, `tokenBalance()`, `setTrustline()`, `signAndSubmit()` |
 
 | Option | Default | |
 | --- | --- | --- |
 | `walletSeed` | fresh account | Account secret: seed (`s...`), hex private key or secret numbers |
 | `fundWallet` | `false` | Fund a fresh account from the faucet before the test |
 | `xrplUrl` | XRPL Testnet | Node the wallet uses to autofill and submit |
+| `walletKind` | `'crossmark'` | Which wallet `test` installs |
 
-### Testing as an onboarded user
-
-To test flows behind sign-up or KYC, complete them once with a dedicated
-Testnet account and give its secret to the tests:
-
-```bash
-npx xrplwright new-wallet        # prints a funded Testnet seed
-```
-
-```ts
-test.use({ walletSeed: process.env.E2E_WALLET_SEED });
-```
+To test flows behind sign-up or KYC, onboard a dedicated Testnet account once
+(`npx xrplwright new-wallet` prints a funded seed) and pass its secret as
+`walletSeed`: see [Test accounts](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/test-accounts.md).
 
 ## CLI
 
@@ -129,11 +92,12 @@ npx xrplwright fund <secret>         # top up an account from the faucet
 
 ## Documentation
 
-- [Guide](https://github.com/szymondros/xrplwright/blob/main/docs/GUIDE.md): writing scenarios, test accounts, API reference, CI,
-  troubleshooting
-- [Example](https://github.com/szymondros/xrplwright/tree/main/examples/demo-dapp): a dapp built on `@crossmarkio/sdk` and its
-  e2e suite (connect, challenge signature, rejections, payment on Testnet)
+- [Documentation](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/README.md): getting started, writing tests, wallets,
+  test accounts, API reference, CI, troubleshooting
+- [Example](https://github.com/szymondros/xrplwright/blob/v0.1.0/examples/demo-dapp): a dapp offering Crossmark and GemWallet, and
+  its e2e suite (connect, challenge signature, rejections, payment on Testnet)
+- [Roadmap](https://github.com/szymondros/xrplwright/blob/v0.1.0/ROADMAP.md) and [changelog](https://github.com/szymondros/xrplwright/blob/v0.1.0/CHANGELOG.md)
 
 ## License
 
-[MIT](https://github.com/szymondros/xrplwright/blob/main/LICENSE)
+[MIT](https://github.com/szymondros/xrplwright/blob/v0.1.0/LICENSE)

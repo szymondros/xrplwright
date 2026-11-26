@@ -2,15 +2,18 @@
   "name": "demo-dapp-e2e",
   "private": true,
   "type": "module",
-  "description": "A tiny XRPL dapp using @crossmarkio/sdk, and its e2e tests written with xrplwright",
+  "description": "A tiny XRPL dapp using @crossmarkio/sdk and @gemwallet/api, and its e2e tests written with xrplwright",
   "scripts": {
     "start": "node server.js",
     "test": "playwright test",
+    "test:offline": "playwright test --grep-invert @testnet",
+    "test:testnet": "playwright test --grep @testnet",
     "test:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@crossmarkio/sdk": "0.4.0"
+    "@crossmarkio/sdk": "0.4.0",
+    "@gemwallet/api": "3.8.0"
   },
   "devDependencies": {
     "@playwright/test": "1.65.1",

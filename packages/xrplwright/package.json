@@ -10,6 +10,7 @@
     "e2e",
     "testing",
     "crossmark",
+    "gemwallet",
     "wallet",
     "dapp",
     "web3"
@@ -54,7 +55,10 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "playwright test",
-    "prepack": "npm run build"
+    "test:offline": "playwright test --grep-invert @testnet",
+    "test:testnet": "playwright test --grep @testnet",
+    "readme": "node scripts/readme.mjs",
+    "prepack": "npm run readme && npm run build"
   },
   "peerDependencies": {
     "@playwright/test": ">=1.40"
@@ -66,6 +70,7 @@
   },
   "devDependencies": {
     "@crossmarkio/sdk": "0.4.0",
+    "@gemwallet/api": "^3.8.0",
     "@playwright/test": "1.65.1",
     "@types/node": "26.6.6",
     "typescript": "7.0.2"

@@ -4,8 +4,12 @@ on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 4 * * *' # nightly: catches Testnet-side breakage between pull requests
+  workflow_dispatch:
 
 jobs:
+  # Required check: no network, so a Testnet or faucet outage cannot block a merge.
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -22,14 +26,39 @@ jobs:
       - run: npm run build
       - run: npm run typecheck
       - run: npx playwright install --with-deps chromium
-      # Some tests use XRPL Testnet and its faucet, which are occasionally slow.
-      - run: npm test
+      - run: npm run test:offline
         env:
           CI: true
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-report-node${{ matrix.node }}
+          name: playwright-report-offline-node${{ matrix.node }}
+          path: |
+            packages/xrplwright/test-results/
+            examples/demo-dapp/playwright-report/
+
+  # Real transactions on XRPL Testnet (tests tagged @testnet). Informational:
+  # it may fail when Testnet or its faucet is down, so it does not fail the
+  # workflow. Do not make it a required check.
+  testnet:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:testnet
+        env:
+          CI: true
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-testnet
           path: |
             packages/xrplwright/test-results/
             examples/demo-dapp/playwright-report/

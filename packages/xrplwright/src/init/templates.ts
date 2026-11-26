@@ -90,7 +90,7 @@ userTest.describe('as an onboarded user', () => {
   userTest.skip(!process.env.E2E_WALLET_SEED, 'set E2E_WALLET_SEED');
 
   userTest('has XRP on Testnet', async ({ wallet, ledger }) => {
-    if ((await ledger.xrpBalance(wallet.address)) < 20) await ledger.fund(wallet.wallet);
+    if ((await ledger.xrpBalance(wallet.address)) < 20) await ledger.fund(wallet.account);
     expect(await ledger.xrpBalance(wallet.address)).toBeGreaterThan(0);
   });
 });
