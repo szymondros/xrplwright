@@ -1,6 +1,6 @@
 {
   "name": "create-xrplwright",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "npm init xrplwright: set up Playwright e2e tests for an XRP Ledger dapp",
   "keywords": ["xrpl", "playwright", "e2e", "create", "scaffold"],
   "license": "MIT",
@@ -12,5 +12,5 @@
   "bin": { "create-xrplwright": "./bin/create-xrplwright.js" },
   "files": ["bin", "README.md", "LICENSE"],
   "engines": { "node": ">=22" },
-  "dependencies": { "xrplwright": "0.1.0" }
+  "dependencies": { "xrplwright": "0.2.0" }
 }

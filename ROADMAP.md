@@ -11,7 +11,7 @@ removed API keeps working for one minor version as `@deprecated`, and
 | Version | Theme | Contents | Status |
 | --- | --- | --- | --- |
 | 0.1.0 | First release | Crossmark wallet, ledger helpers, CLI, `npm init xrplwright` | released |
-| 0.2.0 | Second wallet | Wallet registry (the `wallet` fixture's type follows `walletKind`), `wallet.account` (`wallet.wallet` deprecated), **GemWallet**, docs split into pages | in progress |
+| 0.2.0 | Second wallet | Wallet registry (the `wallet` fixture's type follows `walletKind`), `wallet.account` (`wallet.wallet` deprecated), **GemWallet**, docs split into pages | released |
 | 0.3.0 | Xaman | Xaman for dapps using the browser `xumm` SDK (sign-in, payloads), by intercepting the Xaman API. Payloads created by a dapp's backend are out of scope | planned |
 | 0.4.0 | Ledger | Ledger hardware wallet through an emulated WebHID device speaking the XRP app's APDUs | planned |
 | 0.5.0 | WalletConnect | A real WalletConnect wallet client in Node answering the dapp's session | planned |
