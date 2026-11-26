@@ -38,9 +38,12 @@ page: [Crossmark](wallets/crossmark.md), [GemWallet](wallets/gemwallet.md).
 
 ## `ledger` (`XrplLedger`)
 
+`new XrplLedger(url, { faucetAttempts = 5, faucetRetryDelayMs = 2000 })` for a
+ledger of your own; the fixture uses the defaults.
+
 | Method | Description |
 | --- | --- |
-| `fund(wallet, amountXrp?)` | Fund or create an account from the faucet (Testnet, Devnet) |
+| `fund(wallet, amountXrp?)` | Fund or create an account from the faucet (Testnet, Devnet); retries a briefly unavailable faucet |
 | `xrpBalance(address)` | XRP balance; `0` for an account that doesn't exist |
 | `tokenBalance(address, { currency, issuer })` | Issued-token balance; `0` without a trust line |
 | `setTrustline(wallet, { currency, issuer }, limit?)` | Open a trust line |

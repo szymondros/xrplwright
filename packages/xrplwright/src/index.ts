@@ -4,7 +4,7 @@ export type { XrplOptions, XrplFixtures, WalletKind, WalletOf } from './fixtures
 
 // Ledger
 export { XrplLedger, NETWORKS, engineResult } from './ledger/XrplLedger.js';
-export type { IssuedCurrency, NetworkName } from './ledger/XrplLedger.js';
+export type { IssuedCurrency, LedgerOptions, NetworkName } from './ledger/XrplLedger.js';
 
 // Wallets
 export { WALLETS, createWallet } from './wallets/registry.js';

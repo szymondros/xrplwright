@@ -5,6 +5,7 @@
 | A click on "Connect" does nothing | The page has not hydrated yet: use a retrying helper ([Writing tests](writing-tests.md#tips-from-real-dapps)) |
 | The dapp says the wallet is not installed | You opened a page yourself without `wallet.install(page)` before navigating |
 | Login hangs after the first prompt | The wallet returned a shape the SDK doesn't expect: log `wallet.requests` and open an issue |
+| `XRPLFaucetError ... 502`, `NotConnectedError: Connection failed` | Testnet or its faucet is down. `fund()` already retried; run again later. Keep such tests tagged (e.g. `@testnet`) so CI can run them apart |
 | `actNotFound`, unfunded account | A Testnet reset, or a fresh account without `fundWallet: true` |
 | `tecUNFUNDED_PAYMENT`, `tecPATH_DRY` | Not enough XRP above the reserve, or no trust line / token balance |
 | A user test lands on signup or KYC | The secret's account is not onboarded on this environment |

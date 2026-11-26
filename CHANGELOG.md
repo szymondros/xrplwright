@@ -15,6 +15,9 @@ change the API.
   `walletTest('gemwallet')`.
 - `wallet.account` (the `xrpl.Wallet`) and `wallet.name` on every wallet.
 - `ledger.network` (`mainnet`, `testnet`, `devnet`, `custom`) and `engineResult(response)`.
+- `ledger.fund()` (and so `fundWallet: true`) retries when the faucet or the node is
+  briefly unavailable (5xx, 429, dropped connection): 5 attempts with backoff,
+  set with `new XrplLedger(url, { faucetAttempts, faucetRetryDelayMs })`.
 - `createWallet(kind, options)` and `WALLETS`, to use a wallet driver without the fixtures.
 - Docs split into pages under `docs/` (index: `docs/README.md`), one page per
   wallet, and a `ROADMAP.md`. The npm README now links to the docs of the
