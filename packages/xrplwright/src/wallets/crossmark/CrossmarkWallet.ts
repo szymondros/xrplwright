@@ -1,8 +1,8 @@
 import type { Page } from '@playwright/test';
 import { sign as signHex } from 'ripple-keypairs';
 
+import { engineResult } from '../../ledger/XrplLedger.js';
 import { BaseWallet } from '../BaseWallet.js';
-import type { WalletDriver } from '../types.js';
 import { crossmarkInpage } from './inpage.js';
 import { meta, type CrossmarkRequest, type CrossmarkResponseData } from './protocol.js';
 
@@ -18,7 +18,7 @@ const PROMPTS = new Set(['sign', 'sign-and-submit', 'submit', 'bulk', 'bulk-sign
  * Supported commands: `sign` (SignIn with or without a hex challenge, or any
  * transaction), `sign-and-submit`, `submit`.
  */
-export class CrossmarkWallet extends BaseWallet<CrossmarkRequest> implements WalletDriver<CrossmarkRequest> {
+export class CrossmarkWallet extends BaseWallet<CrossmarkRequest> {
   readonly name = 'crossmark';
 
   async install(page: Page): Promise<void> {
@@ -37,7 +37,7 @@ export class CrossmarkWallet extends BaseWallet<CrossmarkRequest> implements Wal
       case 'sign':
         return data?.tx?.TransactionType === 'SignIn' ? this.signIn(data.hex) : this.sign(data?.tx ?? {});
       case 'sign-and-submit':
-        return this.submit((await this.ledger.sign(this.wallet, data?.tx ?? {})).tx_blob);
+        return this.submit((await this.ledger.sign(this.account, data?.tx ?? {})).tx_blob);
       case 'submit':
         return this.submit(data?.txblob ?? '');
       // Session handshake the SDK runs on detection.
@@ -53,8 +53,7 @@ export class CrossmarkWallet extends BaseWallet<CrossmarkRequest> implements Wal
   }
 
   private network() {
-    const url = this.ledger.url;
-    const type = url.includes('altnet') || url.includes('testnet') ? 'testnet' : url.includes('devnet') ? 'devnet' : 'custom';
+    const { url, network: type } = this.ledger;
     return { label: type, type, protocol: 'xrpl', wss: url, rpc: url };
   }
 
@@ -62,24 +61,22 @@ export class CrossmarkWallet extends BaseWallet<CrossmarkRequest> implements Wal
   private signIn(hex?: string): CrossmarkResponseData {
     return {
       address: this.address,
-      publicKey: this.wallet.publicKey,
-      ...(hex ? { signature: signHex(hex, this.wallet.privateKey) } : {}),
+      publicKey: this.account.publicKey,
+      ...(hex ? { signature: signHex(hex, this.account.privateKey) } : {}),
       meta: meta.success(),
     };
   }
 
   private async sign(tx: Record<string, unknown>): Promise<CrossmarkResponseData> {
-    const signed = await this.ledger.sign(this.wallet, tx);
+    const signed = await this.ledger.sign(this.account, tx);
     return { txblob: signed.tx_blob, hash: signed.hash, meta: meta.success() };
   }
 
   private async submit(txBlob: string): Promise<CrossmarkResponseData> {
-    const { result } = await this.ledger.submitAndWait(txBlob);
-    const txMeta = result.meta;
-    const engineResult = typeof txMeta === 'object' && txMeta !== null ? txMeta.TransactionResult : undefined;
+    const response = await this.ledger.submitAndWait(txBlob);
     return {
-      resp: { result },
-      meta: engineResult === 'tesSUCCESS' ? meta.success() : meta.error(),
+      resp: { result: response.result },
+      meta: engineResult(response) === 'tesSUCCESS' ? meta.success() : meta.error(),
     };
   }
 }

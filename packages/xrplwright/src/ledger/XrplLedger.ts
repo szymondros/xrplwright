@@ -1,5 +1,7 @@
 import { Client, Wallet, dropsToXrp, type SubmittableTransaction, type TxResponse } from 'xrpl';
 
+export type NetworkName = 'mainnet' | 'testnet' | 'devnet' | 'custom';
+
 export interface IssuedCurrency {
   /** 3-letter code or 40-char hex code, as on the ledger. */
   currency: string;
@@ -14,6 +16,15 @@ export class XrplLedger {
   private client: Client | null = null;
 
   constructor(readonly url: string) {}
+
+  /** Which network `url` points at, from its host name; `custom` for any other node. */
+  get network(): NetworkName {
+    const host = this.url.replace(/^\w+:\/\//, '').split(/[:/]/)[0] ?? '';
+    if (host.includes('altnet') || host.includes('testnet')) return 'testnet';
+    if (host.includes('devnet')) return 'devnet';
+    if (MAINNET_HOSTS.some((h) => host === h || host.endsWith(`.${h}`))) return 'mainnet';
+    return 'custom';
+  }
 
   async connect(): Promise<Client> {
     if (!this.client) this.client = new Client(this.url);
@@ -96,6 +107,14 @@ export class XrplLedger {
     return balance;
   }
 }
+
+/** The engine result of a validated transaction, e.g. `tesSUCCESS`. */
+export function engineResult(response: TxResponse): string | undefined {
+  const meta = response.result.meta;
+  return typeof meta === 'object' && meta !== null ? meta.TransactionResult : undefined;
+}
+
+const MAINNET_HOSTS = ['xrplcluster.com', 's1.ripple.com', 's2.ripple.com', 'xrpl.ws'];
 
 export const NETWORKS = {
   testnet: 'wss://s.altnet.rippletest.net:51233',

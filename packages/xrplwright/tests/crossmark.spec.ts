@@ -19,7 +19,8 @@ test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
 
     expect(result.detected).toBe(true);
     expect(result.connect.address).toBe(wallet.address);
-    expect(result.signed.publicKey).toBe(wallet.wallet.publicKey);
+    expect(result.signed.publicKey).toBe(wallet.account.publicKey);
+    expect(wallet.wallet, 'deprecated alias').toBe(wallet.account);
     expect(verify(challenge, result.signed.signature, result.signed.publicKey)).toBe(true);
   });
 

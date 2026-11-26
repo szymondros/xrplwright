@@ -1,9 +1,10 @@
 import { Wallet, type ECDSA } from 'xrpl';
+import type { Page } from '@playwright/test';
 
 import { walletFromSecret } from './secret.js';
 
 import type { XrplLedger } from '../ledger/XrplLedger.js';
-import type { Decision, WalletRequest } from './types.js';
+import type { Decision, WalletDriver, WalletRequest } from './types.js';
 
 /**
  * `ECDSA.secp256k1`. The ECDSA enum is not importable by name from xrpl's CommonJS
@@ -22,9 +23,13 @@ export interface WalletOptions {
   ledger: XrplLedger;
 }
 
-/** Key, approval queue and request log shared by every wallet driver. */
-export abstract class BaseWallet<Req extends WalletRequest> {
-  readonly wallet: Wallet;
+/**
+ * What every wallet driver shares: the account, the approval queue and the
+ * request log. A driver adds `install` (its in-page script) and answers requests.
+ */
+export abstract class BaseWallet<Req extends WalletRequest> implements WalletDriver<Req> {
+  abstract readonly name: string;
+  readonly account: Wallet;
   readonly requests: Req[] = [];
   protected readonly ledger: XrplLedger;
 
@@ -32,12 +37,19 @@ export abstract class BaseWallet<Req extends WalletRequest> {
   private readonly listeners = new Set<(request: Req) => void>();
 
   constructor(options: WalletOptions) {
-    this.wallet = options.seed ? walletFromSecret(options.seed) : Wallet.generate(SECP256K1);
+    this.account = options.seed ? walletFromSecret(options.seed) : Wallet.generate(SECP256K1);
     this.ledger = options.ledger;
   }
 
+  abstract install(page: Page): Promise<void>;
+
+  /** @deprecated Renamed to `account`; `wallet` will be removed in 0.3.0. */
+  get wallet(): Wallet {
+    return this.account;
+  }
+
   get address(): string {
-    return this.wallet.classicAddress;
+    return this.account.classicAddress;
   }
 
   /** The next `count` prompts (signatures, transactions) are rejected. */

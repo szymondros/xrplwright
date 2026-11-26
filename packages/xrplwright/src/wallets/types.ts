@@ -15,7 +15,11 @@ export interface WalletRequest {
  * key, so backends verify its signatures like the real wallet's.
  */
 export interface WalletDriver<Req extends WalletRequest = WalletRequest> {
+  /** The wallet's kind, as `walletKind` and `walletTest()` name it. */
   readonly name: string;
+  /** The account's keys (an xrpl.js `Wallet`). */
+  readonly account: Wallet;
+  /** @deprecated Renamed to `account`; `wallet` will be removed in 0.3.0. */
   readonly wallet: Wallet;
   readonly address: string;
   /** Every request received, in order. */
