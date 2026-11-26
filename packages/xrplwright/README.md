@@ -8,10 +8,10 @@ key and submits to a real network (XRPL Testnet by default).
 
 | Wallet | The dapp uses | |
 | --- | --- | --- |
-| Crossmark | `@crossmarkio/sdk` | [docs](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/wallets/crossmark.md) |
-| GemWallet | `@gemwallet/api` | [docs](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/wallets/gemwallet.md) |
+| Crossmark | `@crossmarkio/sdk` | [docs](https://github.com/szymondros/xrplwright/blob/v0.2.0/docs/wallets/crossmark.md) |
+| GemWallet | `@gemwallet/api` | [docs](https://github.com/szymondros/xrplwright/blob/v0.2.0/docs/wallets/gemwallet.md) |
 
-Xaman, Ledger and WalletConnect are next: see the [roadmap](https://github.com/szymondros/xrplwright/blob/v0.1.0/ROADMAP.md).
+Xaman, Ledger and WalletConnect are next: see the [roadmap](https://github.com/szymondros/xrplwright/blob/v0.2.0/ROADMAP.md).
 
 - **Real signatures**: login challenges and transactions verify like the real wallet's
 - **Real transactions**: autofilled, signed, submitted and awaited until validated
@@ -31,7 +31,7 @@ npm init xrplwright -- --here       # or e2e tests inside the current project
 ```
 
 Or by hand: `npm i -D @playwright/test xrplwright && npx playwright install chromium`.
-Details in [Getting started](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/getting-started.md).
+Details in [Getting started](https://github.com/szymondros/xrplwright/blob/v0.2.0/docs/getting-started.md).
 
 ## Usage
 
@@ -79,7 +79,7 @@ test('rejecting the payment shows an error', async ({ page, wallet }) => {
 
 To test flows behind sign-up or KYC, onboard a dedicated Testnet account once
 (`npx xrplwright new-wallet` prints a funded seed) and pass its secret as
-`walletSeed`: see [Test accounts](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/test-accounts.md).
+`walletSeed`: see [Test accounts](https://github.com/szymondros/xrplwright/blob/v0.2.0/docs/test-accounts.md).
 
 ## CLI
 
@@ -92,12 +92,12 @@ npx xrplwright fund <secret>         # top up an account from the faucet
 
 ## Documentation
 
-- [Documentation](https://github.com/szymondros/xrplwright/blob/v0.1.0/docs/README.md): getting started, writing tests, wallets,
+- [Documentation](https://github.com/szymondros/xrplwright/blob/v0.2.0/docs/README.md): getting started, writing tests, wallets,
   test accounts, API reference, CI, troubleshooting
-- [Example](https://github.com/szymondros/xrplwright/blob/v0.1.0/examples/demo-dapp): a dapp offering Crossmark and GemWallet, and
+- [Example](https://github.com/szymondros/xrplwright/blob/v0.2.0/examples/demo-dapp): a dapp offering Crossmark and GemWallet, and
   its e2e suite (connect, challenge signature, rejections, payment on Testnet)
-- [Roadmap](https://github.com/szymondros/xrplwright/blob/v0.1.0/ROADMAP.md) and [changelog](https://github.com/szymondros/xrplwright/blob/v0.1.0/CHANGELOG.md)
+- [Roadmap](https://github.com/szymondros/xrplwright/blob/v0.2.0/ROADMAP.md) and [changelog](https://github.com/szymondros/xrplwright/blob/v0.2.0/CHANGELOG.md)
 
 ## License
 
-[MIT](https://github.com/szymondros/xrplwright/blob/v0.1.0/LICENSE)
+[MIT](https://github.com/szymondros/xrplwright/blob/v0.2.0/LICENSE)

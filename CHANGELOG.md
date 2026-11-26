@@ -4,7 +4,7 @@ All notable changes to `xrplwright` and `create-xrplwright`. The project follows
 [semantic versioning](https://semver.org); while it is `0.x`, minor versions may
 change the API.
 
-## Unreleased (0.2.0)
+## 0.2.0 (2026-11-26)
 
 ### Added
 
