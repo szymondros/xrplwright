@@ -9,7 +9,9 @@ API), open an issue first so we can agree on the shape.
 npm install
 npx playwright install chromium
 npm run build
-npm test          # library tests + the demo dapp's e2e tests (some hit XRPL Testnet)
+npm test                # library tests + the demo dapp's e2e tests
+npm run test:offline    # only the tests that need no network (what CI requires)
+npm run test:testnet    # only the tests tagged @testnet (real transactions)
 ```
 
 | Path | What |
@@ -43,6 +45,9 @@ Commit messages follow [Conventional Commits](https://www.conventionalcommits.or
 changelog easy to write. A release is a tag on `main`.
 
 - Keep `npm run typecheck` and `npm test` green.
+- Tag a test that talks to XRPL Testnet or its faucet with `{ tag: '@testnet' }`.
+  CI requires the offline tests; the `@testnet` job runs on every PR and nightly
+  but does not block a merge, since Testnet has outages.
 - Add a line to `CHANGELOG.md` under an "Unreleased" heading.
 - Never commit a secret or seed, not even a Testnet one.
 

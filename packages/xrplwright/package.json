@@ -55,6 +55,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "playwright test",
+    "test:offline": "playwright test --grep-invert @testnet",
+    "test:testnet": "playwright test --grep @testnet",
     "readme": "node scripts/readme.mjs",
     "prepack": "npm run readme && npm run build"
   },

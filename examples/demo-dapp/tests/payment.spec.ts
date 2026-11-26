@@ -4,9 +4,10 @@ import { SECP256K1 } from 'xrplwright';
 import { expect, test } from '../fixtures';
 
 // Real transactions on Testnet: the wallet's account is funded from the faucet.
+// Tagged @testnet so CI can run them apart from the offline tests.
 test.use({ fundWallet: true });
 
-test('pays 1.5 XRP and the ledger shows it', async ({ dapp, wallet, ledger }) => {
+test('pays 1.5 XRP and the ledger shows it', { tag: '@testnet' }, async ({ dapp, wallet, ledger }) => {
   const recipient = Wallet.generate(SECP256K1);
   await ledger.fund(recipient);
   const before = await ledger.xrpBalance(recipient.classicAddress);
@@ -21,7 +22,7 @@ test('pays 1.5 XRP and the ledger shows it', async ({ dapp, wallet, ledger }) =>
   expect(await ledger.xrpBalance(recipient.classicAddress)).toBeCloseTo(before + 1.5, 6);
 });
 
-test('a rejected payment is reported and nothing is sent', async ({ dapp, wallet, ledger }) => {
+test('a rejected payment is reported and nothing is sent', { tag: '@testnet' }, async ({ dapp, wallet, ledger }) => {
   const before = await ledger.xrpBalance(wallet.address);
 
   await dapp.connect();

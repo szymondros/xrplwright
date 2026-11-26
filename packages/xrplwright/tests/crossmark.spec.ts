@@ -37,7 +37,7 @@ test.describe('CrossmarkWallet against the real @crossmarkio/sdk', () => {
     expect(meta.isRejected).toBe(true);
   });
 
-  test.describe('on Testnet', () => {
+  test.describe('on Testnet', { tag: '@testnet' }, () => {
     test.use({ fundWallet: true });
 
     test('signs and submits a Payment', async ({ page, wallet, ledger }) => {

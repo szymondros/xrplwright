@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "playwright test",
+    "test:offline": "playwright test --grep-invert @testnet",
+    "test:testnet": "playwright test --grep @testnet",
     "test:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit"
   },

@@ -75,7 +75,7 @@ test.describe('GemWallet against the real @gemwallet/api', () => {
     expect(error).toContain('REQUEST_SET_HOOK/V3');
   });
 
-  test('signTransaction returns the signed blob without submitting', async ({ page, wallet }) => {
+  test('signTransaction returns the signed blob without submitting', { tag: '@testnet' }, async ({ page, wallet }) => {
     await openDemoDapp(page, 'gemwallet');
     // Sequence, Fee and LastLedgerSequence given, so autofill needs no account on the ledger.
     const tx = {
@@ -94,7 +94,7 @@ test.describe('GemWallet against the real @gemwallet/api', () => {
     expect(decode(signed.result.signature)).toMatchObject({ ...tx, Account: wallet.address, SigningPubKey: wallet.account.publicKey });
   });
 
-  test.describe('on Testnet', () => {
+  test.describe('on Testnet', { tag: '@testnet' }, () => {
     test.use({ fundWallet: true });
 
     test('sendPayment submits a Payment and returns its hash', async ({ page, wallet, ledger }) => {

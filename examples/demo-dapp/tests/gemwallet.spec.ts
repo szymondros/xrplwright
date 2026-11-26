@@ -19,7 +19,7 @@ test('a rejected GemWallet connection leaves the user signed out', async ({ dapp
   await expect(dapp.account()).toHaveText('Connection rejected');
 });
 
-test.describe('on Testnet', () => {
+test.describe('on Testnet', { tag: '@testnet' }, () => {
   test.use({ fundWallet: true });
 
   test('pays 1.5 XRP through GemWallet', async ({ dapp, wallet, ledger }) => {
